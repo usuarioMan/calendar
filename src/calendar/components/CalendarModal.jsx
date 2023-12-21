@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { addHours } from "date-fns";
+import { addHours, differenceInSeconds } from "date-fns";
 import es from "date-fns/locale/es";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -27,6 +27,7 @@ export const CalendarModal = () => {
     start: new Date(),
     end: addHours(new Date(), 2),
   });
+  const [validForm, setValidForm] = useState(true);
 
   const onInputChange = ({ target }) => {
     const { value, name } = target;
@@ -45,7 +46,11 @@ export const CalendarModal = () => {
 
   const onSaveSubmit = (e) => {
     e.preventDefault();
-    console.log("Saved");
+    const difference = differenceInSeconds(formValues.end, formValues.start);
+    difference <= 0 || NaN ? setValidForm(false) : setValidForm(true);
+    if (!validForm) return;
+
+    console.log(formValues);
   };
 
   const openModal = () => {
@@ -97,6 +102,14 @@ export const CalendarModal = () => {
             showTimeSelect
             timeCaption="Hora"
           />
+        </div>
+
+        <div
+          className="alert alert-danger"
+          role="alert"
+          style={{ display: !validForm ? "block" : "none" }}
+        >
+          {"Las fechas son incorrectas"}
         </div>
 
         <hr />

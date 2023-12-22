@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { onSetActiveEvent, onAddNewEvent, onUpdateEvent } from "../store";
+import {
+  onSetActiveEvent,
+  onAddNewEvent,
+  onUpdateEvent,
+  onDeleteEvent,
+} from "../store";
 import { v4 as uuidv4 } from "uuid";
 
 export const useCalendarStore = () => {
@@ -18,13 +23,20 @@ export const useCalendarStore = () => {
       : dispatch(onAddNewEvent({ ...calendarEvent, _id: uuidv4() }));
   };
 
+  const startDeletingEvent = async () => {
+    // TODO: llegar al backend
+    dispatch(onDeleteEvent());
+  };
+
   return {
     //* PROPERTIES:
     events,
     activeEvent,
+    hasEventSelected: !!activeEvent,
 
     //* METHODS:
     setActiveEvent,
     startSavingEvent,
+    startDeletingEvent,
   };
 };

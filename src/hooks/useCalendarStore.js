@@ -1,20 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
-import { onSetActiveEvent } from "../store";
+import { onSetActiveEvent, onAddNewEvent } from "../store";
+import { v4 as uuidv4 } from "uuid";
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
   const { events, activeEvent } = useSelector((state) => state.calendar);
 
-  const setActiveEvent = (eventId) => {
-    dispatch(onSetActiveEvent(eventId));
+  const setActiveEvent = (calendarEvent) => {
+    dispatch(onSetActiveEvent(calendarEvent));
+  };
+
+  const startSavingEvent = async (calendarEvent) => {
+    // TODO: llegar al backedn
+
+    calendarEvent._id
+      ? console.log("Creando")
+      : dispatch(onAddNewEvent({ ...calendarEvent, _id: uuidv4() }));
   };
 
   return {
     //* PROPERTIES:
     events,
     activeEvent,
-    setActiveEvent,
 
     //* METHODS:
+    setActiveEvent,
+    startSavingEvent,
   };
 };

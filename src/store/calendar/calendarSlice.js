@@ -31,24 +31,19 @@ const tempEvents = [
 const initialState = {
   events: tempEvents,
   activeEvent: null,
-  eventCreatingStatus: "not-creating", // not-creating, creating, saving,
-  errorMessage: null,
 };
 export const calendarSlice = createSlice({
   name: "calendar",
   initialState,
   reducers: {
     onSetActiveEvent: (state, { payload }) => {
-      state.activeEvent = state.events.find(({ _id }) => _id === payload);
+      state.activeEvent = payload;
     },
-    onClearActiveEvent: (state) => {
+    onAddNewEvent: (state, { payload }) => {
+      state.events.push(payload);
       state.activeEvent = null;
-    },
-    onChangeCreatingStatus: (state, { payload }) => {
-      state.eventCreatingStatus = payload;
     },
   },
 });
 
-export const { onSetActiveEvent, onClearActiveEvent, onChangeCreatingStatus } =
-  calendarSlice.actions;
+export const { onAddNewEvent, onSetActiveEvent } = calendarSlice.actions;

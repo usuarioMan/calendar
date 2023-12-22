@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 import DatePicker, { registerLocale } from "react-datepicker";
+import { v4 as uuidv4 } from "uuid";
 import { addHours, differenceInSeconds } from "date-fns";
 import es from "date-fns/locale/es";
 import "react-datepicker/dist/react-datepicker.css";
@@ -30,7 +31,7 @@ const initialFormState = {
 };
 export const CalendarModal = () => {
   const { closeDateModal, isDateModalOpen } = useUiStore();
-  const { activeEvent } = useCalendarStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
 
   const [formValues, setFormValues] = useState(initialFormState);
 
@@ -43,9 +44,9 @@ export const CalendarModal = () => {
   }, [formValues.title, formSubmitted]);
 
   useEffect(() => {
-    activeEvent !== null
-      ? setFormValues({ ...activeEvent })
-      : setFormValues(initialFormState);
+    if (activeEvent !== null) {
+      setFormValues({ ...activeEvent });
+    }
   }, [activeEvent]);
 
   const onInputChange = ({ target }) => {
@@ -63,15 +64,22 @@ export const CalendarModal = () => {
     });
   };
 
-  const onSaveSubmit = (e) => {
+  const onSaveSubmit = async (e) => {
     e.preventDefault();
     setformSubmitted(true);
     const difference = differenceInSeconds(formValues.end, formValues.start);
     difference <= 0 || NaN ? setValidForm(false) : setValidForm(true);
     if (!validForm) return;
 
-    //Enviamos el formulario.
-    console.log(formValues);
+    //TODO: Almacenar Evento en base de datos.
+    console.log({ formValues, e });
+
+    //TODO: Retornar _id de la base de datos.
+    //TODO: insertar _id en el evento antes de actualizar el estado con createNewEvent
+
+    await startSavingEvent(formValues);
+    closeDateModal();
+
     Swal.fire({
       title: "Exito",
       text: "Nuevo evento creado",

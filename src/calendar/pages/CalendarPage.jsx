@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useCalendarStore, useUiStore } from "../../hooks";
 
 export const CalendarPage = () => {
-  const { events, updateActiveEvent, setActiveEvent } = useCalendarStore();
+  const { events, setActiveEvent } = useCalendarStore();
   const { openDateModal } = useUiStore();
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "week"
@@ -28,7 +28,7 @@ export const CalendarPage = () => {
   };
 
   const onSelect = (event) => {
-    setActiveEvent(event._id);
+    setActiveEvent(event);
   };
 
   const onViewChanged = (event) => {

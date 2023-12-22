@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { onSetActiveEvent, onAddNewEvent } from "../store";
+import { onSetActiveEvent, onAddNewEvent, onUpdateEvent } from "../store";
 import { v4 as uuidv4 } from "uuid";
 
 export const useCalendarStore = () => {
@@ -14,7 +14,7 @@ export const useCalendarStore = () => {
     // TODO: llegar al backedn
 
     calendarEvent._id
-      ? console.log("Creando")
+      ? dispatch(onUpdateEvent({ ...calendarEvent }))
       : dispatch(onAddNewEvent({ ...calendarEvent, _id: uuidv4() }));
   };
 

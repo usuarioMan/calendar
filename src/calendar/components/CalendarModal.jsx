@@ -22,16 +22,17 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+const initialFormState = {
+  title: "",
+  notes: "",
+  start: new Date(),
+  end: addHours(new Date(), 2),
+};
 export const CalendarModal = () => {
   const { closeDateModal, isDateModalOpen } = useUiStore();
   const { activeEvent } = useCalendarStore();
 
-  const [formValues, setFormValues] = useState({
-    title: "",
-    notes: "",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-  });
+  const [formValues, setFormValues] = useState(initialFormState);
 
   const [validForm, setValidForm] = useState(true);
   const [formSubmitted, setformSubmitted] = useState(false);
@@ -42,9 +43,9 @@ export const CalendarModal = () => {
   }, [formValues.title, formSubmitted]);
 
   useEffect(() => {
-    if (activeEvent !== null) {
-      setFormValues({ ...activeEvent });
-    }
+    activeEvent !== null
+      ? setFormValues({ ...activeEvent })
+      : setFormValues(initialFormState);
   }, [activeEvent]);
 
   const onInputChange = ({ target }) => {
